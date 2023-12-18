@@ -176,6 +176,5 @@ class Ufo extends THREE.Group {
       this.isInMovement = false;
       this.changeHolder++;
     }
-    console.log(this.isInMovement + " " + k + " --- " + this.alienPostureIndex + "->"+nextPostureIndex) ;
   };
 }

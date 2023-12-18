@@ -1,254 +1,270 @@
 ﻿<!DOCTYPE html>
 
 <html>
-  <head>
-    <script src="scripts/three.min.js"></script>
-    <script src="scripts/mannequin.js"></script>
-    <script src="scripts/ufo.js"></script>
-    <script src="scripts/peopleBuilder.js"></script>
-    <script src="scripts/objectBuilder.js"></script>
 
-    <style>
-      @font-face {
-        font-family: Steam-Base;
-        src: url("fonts/cyrillic_pixel-7.ttf") format("truetype");
+<head>
+  <script src="scripts/three.min.js"></script>
+  <script src="scripts/mannequin.js"></script>
+  <script src="scripts/ufo.js"></script>
+  <script src="scripts/peopleBuilder.js"></script>
+  <script src="scripts/objectBuilder.js"></script>
+
+  <style>
+    @font-face {
+      font-family: Steam-Base;
+      src: url("fonts/cyrillic_pixel-7.ttf") format("truetype");
+    }
+
+    body {
+      color: gold;
+      text-shadow: 0 0 10px black;
+      font-family: Steam-Base;
+    }
+
+    h1 {
+      font-size: 3em;
+      position: fixed;
+      z-index: 10;
+      right: 1em;
+    }
+
+    div {
+      position: fixed;
+      z-index: 10;
+      bottom: 1em;
+      left: 1em;
+      font-size: 1.5em;
+      font-style: italic;
+    }
+
+    audio::-webkit-media-controls-panel {
+      background-color: #333333;
+    }
+
+    audio {
+      position: fixed;
+      z-index: 10;
+      top: 1em;
+      left: 1em;
+      font-size: 1.5em;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Сложете реално заглавие -->
+  <h1>НЕЗЕМЕН ГОСТ</h1>
+
+  <audio controls autoplay loop>
+    <source src="sounds/The X-Files.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Сложете описание на сцената (опитайте с рима) -->
+  <div>
+    Дойдох на таз земя за малко,<br />
+    да взема за приятел аз един човек,<br />
+    дали ще му хареса таз идея,<br />
+    ще разберем, ако ми пишат точки пет!
+  </div>
+
+  <script>
+    createScene(); // инициализиране на сцената
+    const loader = new THREE.TextureLoader();
+
+    // scene.background = loader.load ('images/skyBackground.webp')
+    // CREDITS TO: Bogomil - 8MI0800196 
+    scene.background = loader.load("https://cdn.discordapp.com/attachments/940555474418409492/1186228555282124830/skyBackground.webp?ex=65927c6e&is=6580076e&hm=d13134665d6a7b540d7af0751b6eee8786bbbbdb1d0d4e78bcb4a8b8c6b26df6&");
+
+    scene.fog = new THREE.Fog('black', 30, 1050);
+
+    camera.position.set(250, 70, 250);
+    camera.lookAt(new THREE.Vector3(0, 25, 0));
+    //camera.position.set(0, 10, 25);
+    //camera.lookAt(new THREE.Vector3(0, 17.5, 0));
+
+    light.position.set(200, 40, 200);
+
+    var manBeingSuckedIn = new myMale();
+
+    var shockedViewer = new myFemale();
+    var shockedViewerPostures = [
+      { "version": 7, "data": [[-35, 0, -125], [-0.8, -90, 0], [0, 0, -2], [0, 0, 5], [6, 0, 0], [0], [-6, -6, -0.6], [-6, 0, 11.5], [20.2], [6, 6, -0.6], [7, -0.6, -12.1], [69.1], [5, 0, 0], [-90, 70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [-39.1, 32.1, 77.3], [133.8], [80, 70.7, -83.5], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 5.2, 0, 4.1, 0, 44.9], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[-35, 0, -125], [-8.1, -90, 0], [0, 0, -8.1], [0, 0, 5], [6, 0, 13.4], [44.2], [-6, -6, -0.6], [-6, 0, 17.4], [46.5], [6, 6, -0.6], [7, -0.6, 101.5], [0], [-7.8, 0, 0], [-90, 70, 75, 0, 22.2, 0, 55.8], [0, 0, -9.7, 0, 1.9, 0, 7.1], [0, 0, 52.1, 0, 106.7, 0, 80.7], [0, 0, 34.4, 0, 104.7, 0, 75.7], [0, 0, 83.6, 0, 120, 0, 10], [-39.1, 32.1, 77.3], [133.8], [80, 70.7, -83.5], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 5.2, 0, 4.1, 0, 44.9], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[-35, 0, -125], [-0.8, -90, 0], [-2.6, 0.1, -2], [0, 0, 5], [6, 0, 0], [0], [-6, -6, -0.6], [-6, 0, 11.5], [20.2], [6, 6, -0.6], [7, -0.6, 101.5], [0], [-7.8, 0, 0], [-90, 70, 75, 0, 22.2, 0, 55.8], [0, 0, -9.7, 0, 1.9, 0, 7.1], [0, 0, 52.1, 0, 106.7, 0, 80.7], [0, 0, 34.4, 0, 104.7, 0, 75.7], [0, 0, 83.6, 0, 120, 0, 10], [-67.5, -31.1, 120.6], [90.3], [-63.6, 49.3, 80.6], [90, -70, 84.2, 0, 0.6, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 5.2, 0, 4.1, 0, 44.9], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[-35, 0, -125], [-0.8, -90, 0], [-2.6, 0.1, -2], [0, 0, 5], [6, 0, 0], [0], [-6, -6, -0.6], [-6, 0, 11.5], [20.2], [6, 6, -0.6], [8.4, -5.2, 74], [108.8], [17.1, -3.7, 1.2], [-90, 70, 78.8, 0, 0, 0, 15.8], [0, 0, 54.7, 0, 89.2, 0, 29.8], [0, 0, 52.1, 0, 106.7, 0, 80.7], [21, 13.8, 88.9, 0, 51.7, 0, 75.7], [0, 0, 83.6, 0, 120, 0, 10], [-67.5, -31.1, 120.6], [90.3], [-63.6, 49.3, 80.6], [90, -70, 84.2, 0, 0.6, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 5.2, 0, 4.1, 0, 44.9], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[-35, 0, -125], [-8.1, -90, 0], [0, 0, -8.1], [0, 0, 5], [6, 0, 13.4], [44.2], [-6, -6, -0.6], [-6, 0, 17.4], [46.5], [6, 6, -0.6], [7, -0.6, 101.5], [0], [-7.8, 0, 0], [-90, 70, 75, 0, 22.2, 0, 55.8], [0, 0, -9.7, 0, 1.9, 0, 7.1], [0, 0, 52.1, 0, 106.7, 0, 80.7], [0, 0, 34.4, 0, 104.7, 0, 75.7], [0, 0, 83.6, 0, 120, 0, 10], [-39.1, 32.1, 77.3], [133.8], [80, 70.7, -83.5], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 5.2, 0, 4.1, 0, 44.9], [0, 0, 10, 0, 10, 0, 10]] },
+    ];
+    shockedViewer.posture = this.shockedViewerPostures[0];
+
+    var handCrossingViewer = new myMale(0.8, 'black', 'orange', '#603909');
+    var handCrossingViewerPostures = [
+      { "version": 7, "data": [[15, 0, +100], [-12.2, 89.7, 25.5], [0, 0, -21.4], [0, 0, -2.1], [6, 0, 6.9], [32.2], [-6, -6, -0.6], [-6, 0, 0.3], [12.7], [6, 6, -0.6], [22.2, -14.8, 81], [119], [-9.8, -35.6, 6], [-90.6, 68.7, 81.4, 0, 9.9, 0, 10], [0, 0, 10, 0, 54.2, 0, 10], [-4.9, -1.2, 13.4, 0, 45, 0, 3.1], [0, 0, 38.6, 0, 103.3, 0, 61.3], [0, 0, 47.3, 0, 102.6, 0, 58.3], [-8.1, 0.7, -3.6], [24.6], [-5, 0, 0], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[15, 0, 100], [-12.2, 89.7, 25.5], [0, 0, -24.9], [0, 0, -5.6], [6, 0, 6.9], [32.2], [-6, -6, -0.6], [-6, 0, 0.3], [12.7], [6, 6, -0.6], [23, -63.1, -6], [97.7], [26.5, -26.5, 25.3], [-90.6, 68.7, 81.4, 0, 9.9, 0, 10], [0, 0, 10, 0, 54.2, 0, 10], [-4.9, -1.2, 13.4, 0, 45, 0, 3.1], [0, 0, 38.6, 0, 103.3, 0, 61.3], [0, 0, 47.3, 0, 102.6, 0, 58.3], [-10.7, 0.9, -10.2], [58.7], [-5, 0, 0], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[15, 0, 100], [-12.2, 89.7, 25.5], [0, 0, -29.8], [0, 0, -14.5], [6, 0, 15.6], [41.1], [-6, -6, -19.1], [-6, 0, 12.6], [40.1], [6, 6, -19.9], [44, -47.1, 37.8], [131.6], [11.5, 44.8, 27.5], [-90.6, 68.7, 81.4, 0, 9.9, 0, 10], [0, 0, 10, 0, 54.2, 0, 10], [-4.9, -1.2, 13.4, 0, 45, 0, 3.1], [-0.8, -0.6, 47.8, 0, 103.3, 0, 61.3], [0, 0, 47.3, 0, 102.6, 0, 58.3], [-8.9, 0.6, -10.2], [58.7], [-5, 0, 0], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[15, 0, 100], [-12.2, 89.7, 25.5], [0, 0, -15.3], [0, 0, 17.1], [6, 0, 0.5], [28.3], [-6, -6, -14.8], [-6, 0, 5.5], [28.5], [6, 6, -9.9], [44, -47.1, -5.4], [147.8], [-22.2, 22.7, 47], [-90.6, 68.7, 81.4, 0, 9.9, 0, 10], [0, 0, 10, 0, 54.2, 0, 10], [-4.9, -1.2, 13.4, 0, 45, 0, 3.1], [-0.8, -0.6, 47.8, 0, 103.3, 0, 61.3], [0, 0, 47.3, 0, 102.6, 0, 58.3], [-8.9, 0.6, -14.9], [31.8], [-5, 0, 0], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[15, 0, 100], [-12.2, 89.7, 25.5], [1.4, -0.4, -15.3], [3.5, 1.1, 17], [8, 0, 0.5], [28.3], [-6, -6, -14.8], [-6, 0, 5.5], [28.5], [6, 6, -9.9], [35.4, -49.5, 20.1], [17.5], [-23.8, 20.9, 51.6], [-90.6, 68.7, 90.9, 0, 90, 0, 62.3], [0, 0, 23, 0, 84.9, 0, 65.8], [-5.3, -1.3, 49, 0, 79, 0, 109.2], [-0.8, -0.6, 47.8, 0, 103.3, 0, 61.3], [0, 0, 47.3, 0, 102.6, 0, 58.3], [-9.1, 0.6, -14.9], [31.8], [-5, 0, 0], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+    ];
+    handCrossingViewer.posture = this.handCrossingViewerPostures[0];
+
+    var prayingViewer = new myMale(0.65, 'orange', 'white', '#F0C2AA');
+    var prayingViewerPostures = [
+      { "version": 7, "data": [[100, 0, -100], [-180, -48.4, 161.4], [0, 0, 7.7], [0, 0, 15.6], [6, 8.9, 80.7], [150], [-5.5, 31.1, 66.8], [-6, 0, 82.4], [149.9], [6, 6, 68], [3.3, -0.3, -5], [50.3], [-6.3, 27.2, 0], [-90, 70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [-2.2, 1, 4.8], [33.9], [-5.6, -37.9, 0], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[100, 0, -100], [-180, -48.4, 162.7], [-2, 0.5, -60], [0.2, 1.1, -24.2], [6, 8.9, 79.9], [150], [-5.5, 31.1, 75.1], [-6, 0, 82.4], [149.9], [6, 6, 68], [3.3, -0.3, 142.3], [1.6], [-9, 27.1, 1.2], [-90, 70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [-2.2, 1, 149.9], [0.1], [-11.7, -37.8, -3.8], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[100, 0, -100], [-180, -48.4, 162.7], [-2, 0.5, -60], [0.2, 1.1, -24.2], [6, 8.9, 79.9], [150], [-5.5, 31.1, 75.1], [-6, 0, 82.4], [149.9], [6, 6, 68], [3.3, -0.3, 142.3], [1.6], [-9, 27.1, 1.2], [-90, 70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [-2.2, 1, 149.9], [0.1], [-11.7, -37.8, -3.8], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[100, 0, -100], [-180, -48.4, 162.7], [-2, 0.5, 16.8], [0.2, 1.1, 11.1], [6, 8.9, 79.9], [150], [-5.5, 31.1, 75.1], [-6, 0, 82.4], [149.9], [6, 6, 68], [3.3, -0.3, 145.1], [20.8], [-31.5, 24.9, 11.2], [-90, 70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [-2.2, 1, 134.5], [46.4], [-11.7, -37.8, -3.8], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+      { "version": 7, "data": [[100, 0, -100], [-180, -48.4, 162.7], [-2, 0.5, -60], [0.2, 1.1, -24.2], [6, 8.9, 79.9], [150], [-5.5, 31.1, 75.1], [-6, 0, 82.4], [149.9], [6, 6, 68], [3.3, -0.3, 142.3], [1.6], [-9, 27.1, 1.2], [-90, 70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [-2.2, 1, 149.9], [0.1], [-11.7, -37.8, -3.8], [90, -70, 75, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10], [0, 0, 10, 0, 10, 0, 10]] },
+    ];
+    prayingViewer.posture = this.prayingViewerPostures[0];
+
+    var postureIndex = 0;
+    var isInMovement = false;
+    var changeHolder = 0;
+
+    var ufo = new Ufo();
+    scene.add(ufo);
+    ufo.position.set(0, 75, 0);
+
+    var tree1 = new Tree(-150, 0, 50, 0.8);
+    var tree2 = new Tree(100, 0, -150, 0.75);
+    var tree3 = new Tree(100, 0, -50, 1);
+    var tree4 = new Tree(-50, 0, 150, 0.9);
+    var tree5 = new Tree(-75, -15, 80, 0.6);
+    var tree6 = new Tree(-50, 0, -150, 0.9);
+    scene.add(tree1, tree2, tree3, tree4, tree5, tree6);
+
+    var colorFlowers = ['red', 'blue', 'orange', 'yellow', 'cyan', 'magenta'];
+    for (var i = 0; i <= 60; i++) {
+      var angle = Math.random() * (2 * Math.PI);
+      var distance = 100 + Math.random() * 150;
+
+      var flower = new Flower(distance * Math.cos(angle), distance * Math.sin(angle), colorFlowers[(Math.floor(Math.random() * colorFlowers.length))]);
+      scene.add(flower);
+    }
+
+    function findBottom(mannequinToFind) {
+      return Math.min(
+        mannequinToFind.l_ankle.point(6, 2, 0).y,
+        mannequinToFind.l_ankle.point(-2, 2.5, 0).y,
+        mannequinToFind.l_ankle.point(2, 2.5, 2).y,
+        mannequinToFind.l_ankle.point(2, 2.5, -2).y,
+
+        mannequinToFind.r_ankle.point(6, 2, 0).y,
+        mannequinToFind.r_ankle.point(-2, 2.5, 0).y,
+        mannequinToFind.r_ankle.point(2, 2.5, 2).y,
+        mannequinToFind.r_ankle.point(2, 2.5, -2).y
+      );
+    }
+
+    function animate(t) {
+      ufo.animate(t);
+
+      {
+        manBeingSuckedIn.position.set(0, 5 + 5 * sin(0.4 * t), 0);
+
+        manBeingSuckedIn.bend = 30 * sin(t);
+        manBeingSuckedIn.tilt = 40 * cos(1.7 * t);
+
+        manBeingSuckedIn.head.turn = 40 * sin(1.9 * t);
+        manBeingSuckedIn.head.nod = 20 * sin(2.3 * t);
+        manBeingSuckedIn.head.tilt = 10 * sin(1.4 * t);
+
+        manBeingSuckedIn.l_leg.reset();
+        manBeingSuckedIn.r_leg.reset();
+        manBeingSuckedIn.l_leg.straddle = 30 * cos(2.2 * t) + 50;
+        manBeingSuckedIn.r_leg.straddle = 30 * sin(2.6 * t) + 50;
+        manBeingSuckedIn.l_leg.raise = 40 * sin(2.4 * t) + 30;
+        manBeingSuckedIn.r_leg.raise = 40 * cos(2.1 * t) + 30;
+        manBeingSuckedIn.l_leg.turn = 30 * cos(1.2 * t) + 20;
+        manBeingSuckedIn.r_leg.turn = 30 + sin(1.6 * t) + 20;
+
+        manBeingSuckedIn.l_knee.bend = 40 * sin(2.4 * t) + 40;
+        manBeingSuckedIn.r_knee.bend = 40 * sin(1.9 * t) + 40;
+
+        manBeingSuckedIn.l_arm.reset();
+        manBeingSuckedIn.r_arm.reset();
+        manBeingSuckedIn.l_arm.raise = 50 * sin(2.1 * t) + 40;
+        manBeingSuckedIn.r_arm.raise = 50 * cos(2.5 * t) + 40;
+        manBeingSuckedIn.l_arm.straddle = 20 * cos(2.3 * t) + 20;
+        manBeingSuckedIn.r_arm.straddle = 20 * sin(2.4 * t) + 20;
+        manBeingSuckedIn.l_arm.turn = 30 * cos(1.7 * t) + 40;
+        manBeingSuckedIn.r_arm.turn = 30 * sin(1.4 * t) + 40;
+
+        manBeingSuckedIn.l_elbow.bend = 40 * sin(1.9 * t) + 40;
+        manBeingSuckedIn.r_elbow.bend = 40 * sin(2.2 * t) + 40;
+
+        manBeingSuckedIn.l_fingers.bend = 40 * sin(4.9 * t) + 40;
+        manBeingSuckedIn.r_fingers.bend = 40 * cos(4.9 * t) + 40;
       }
-      body {
-        color: gold;
-        text-shadow: 0 0 10px black;
-        font-family: Steam-Base;
+
+      var nextPostureIndex = this.postureIndex + 1;
+      if (nextPostureIndex >= shockedViewerPostures.length) {
+        nextPostureIndex = 0;
       }
-      h1 {
-        font-size: 3em;
-        position: fixed;
-        z-index: 10;
-        text-align: right;
-        width: 97.5%;
-      }
-      div {
-        position: fixed;
-        z-index: 10;
-        bottom: 1em;
-        left: 1em;
-        font-size: 1.5em;
-        font-style: italic;
-      }
-    </style>
-  </head>
+      // For stops at each end:
+      // var k = THREE.MathUtils.clamp(0.5 + sin(t), 0, 1);
+      // For continous animation: (experiencing glitches)
+      var k = Math.abs(sin(t + Math.PI * (changeHolder - 1)));
 
-  <body>
-    <audio id="music">
-			<source src="sounds/The X-Files.mp3" type="audio/mpeg">
-		</audio>
-
-    <!-- Сложете реално заглавие -->
-    <h1>НЕЗЕМЕН ГОСТ</h1>
-
-    <!-- Сложете описание на сцената (опитайте с рима) -->
-    <div>
-      Дойдох на таз земя за малко,<br />
-      да взема за приятел аз един човек,<br />
-      дали ще му хареса таз идея,<br />
-      ще разберем, ако ми пишат точки пет!
-    </div>
-
-    <script>
-			document.getElementById('music').play();
-      createScene(); // инициализиране на сцената
-      const loader = new THREE.TextureLoader();
-      
-      // scene.background = loader.load ('images/skyBackground.webp')
-      // CREDITS TO: Bogomil - 8MI0800196 
-      scene.background = loader.load( "https://cdn.discordapp.com/attachments/940555474418409492/1186228555282124830/skyBackground.webp?ex=65927c6e&is=6580076e&hm=d13134665d6a7b540d7af0751b6eee8786bbbbdb1d0d4e78bcb4a8b8c6b26df6&" );
-
-      scene.fog = new THREE.Fog('black', 30, 1050);
-
-      camera.position.set(250, 70, 250);
-      camera.lookAt(new THREE.Vector3(0, 25, 0));
-      //camera.position.set(0, 10, 25);
-      //camera.lookAt(new THREE.Vector3(0, 17.5, 0));
-
-      light.position.set(200, 40, 200);
-
-      var manBeingSuckedIn = new myMale();
-
-      var shockedViewer = new myFemale();
-      var shockedViewerPostures = [
-        {"version":7,"data":[[-35,0,-125],[-0.8,-90,0],[0,0,-2],[0,0,5],[6,0,0],[0],[-6,-6,-0.6],[-6,0,11.5],[20.2],[6,6,-0.6],[7,-0.6,-12.1],[69.1],[5,0,0],[-90,70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[-39.1,32.1,77.3],[133.8],[80,70.7,-83.5],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,5.2,0,4.1,0,44.9],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[-35,0,-125],[-8.1,-90,0],[0,0,-8.1],[0,0,5],[6,0,13.4],[44.2],[-6,-6,-0.6],[-6,0,17.4],[46.5],[6,6,-0.6],[7,-0.6,101.5],[0],[-7.8,0,0],[-90,70,75,0,22.2,0,55.8],[0,0,-9.7,0,1.9,0,7.1],[0,0,52.1,0,106.7,0,80.7],[0,0,34.4,0,104.7,0,75.7],[0,0,83.6,0,120,0,10],[-39.1,32.1,77.3],[133.8],[80,70.7,-83.5],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,5.2,0,4.1,0,44.9],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[-35,0,-125],[-0.8,-90,0],[-2.6,0.1,-2],[0,0,5],[6,0,0],[0],[-6,-6,-0.6],[-6,0,11.5],[20.2],[6,6,-0.6],[7,-0.6,101.5],[0],[-7.8,0,0],[-90,70,75,0,22.2,0,55.8],[0,0,-9.7,0,1.9,0,7.1],[0,0,52.1,0,106.7,0,80.7],[0,0,34.4,0,104.7,0,75.7],[0,0,83.6,0,120,0,10],[-67.5,-31.1,120.6],[90.3],[-63.6,49.3,80.6],[90,-70,84.2,0,0.6,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,5.2,0,4.1,0,44.9],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[-35,0,-125],[-0.8,-90,0],[-2.6,0.1,-2],[0,0,5],[6,0,0],[0],[-6,-6,-0.6],[-6,0,11.5],[20.2],[6,6,-0.6],[8.4,-5.2,74],[108.8],[17.1,-3.7,1.2],[-90,70,78.8,0,0,0,15.8],[0,0,54.7,0,89.2,0,29.8],[0,0,52.1,0,106.7,0,80.7],[21,13.8,88.9,0,51.7,0,75.7],[0,0,83.6,0,120,0,10],[-67.5,-31.1,120.6],[90.3],[-63.6,49.3,80.6],[90,-70,84.2,0,0.6,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,5.2,0,4.1,0,44.9],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[-35,0,-125],[-8.1,-90,0],[0,0,-8.1],[0,0,5],[6,0,13.4],[44.2],[-6,-6,-0.6],[-6,0,17.4],[46.5],[6,6,-0.6],[7,-0.6,101.5],[0],[-7.8,0,0],[-90,70,75,0,22.2,0,55.8],[0,0,-9.7,0,1.9,0,7.1],[0,0,52.1,0,106.7,0,80.7],[0,0,34.4,0,104.7,0,75.7],[0,0,83.6,0,120,0,10],[-39.1,32.1,77.3],[133.8],[80,70.7,-83.5],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,5.2,0,4.1,0,44.9],[0,0,10,0,10,0,10]]},
-      ];
-      shockedViewer.posture = this.shockedViewerPostures[0];
-
-      var handCrossingViewer = new myMale(0.8, 'black', 'orange', '#603909');
-      var handCrossingViewerPostures = [
-        {"version":7,"data":[[15,0,+100],[-12.2,89.7,25.5],[0,0,-21.4],[0,0,-2.1],[6,0,6.9],[32.2],[-6,-6,-0.6],[-6,0,0.3],[12.7],[6,6,-0.6],[22.2,-14.8,81],[119],[-9.8,-35.6,6],[-90.6,68.7,81.4,0,9.9,0,10],[0,0,10,0,54.2,0,10],[-4.9,-1.2,13.4,0,45,0,3.1],[0,0,38.6,0,103.3,0,61.3],[0,0,47.3,0,102.6,0,58.3],[-8.1,0.7,-3.6],[24.6],[-5,0,0],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[15,0,100],[-12.2,89.7,25.5],[0,0,-24.9],[0,0,-5.6],[6,0,6.9],[32.2],[-6,-6,-0.6],[-6,0,0.3],[12.7],[6,6,-0.6],[23,-63.1,-6],[97.7],[26.5,-26.5,25.3],[-90.6,68.7,81.4,0,9.9,0,10],[0,0,10,0,54.2,0,10],[-4.9,-1.2,13.4,0,45,0,3.1],[0,0,38.6,0,103.3,0,61.3],[0,0,47.3,0,102.6,0,58.3],[-10.7,0.9,-10.2],[58.7],[-5,0,0],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[15,0,100],[-12.2,89.7,25.5],[0,0,-29.8],[0,0,-14.5],[6,0,15.6],[41.1],[-6,-6,-19.1],[-6,0,12.6],[40.1],[6,6,-19.9],[44,-47.1,37.8],[131.6],[11.5,44.8,27.5],[-90.6,68.7,81.4,0,9.9,0,10],[0,0,10,0,54.2,0,10],[-4.9,-1.2,13.4,0,45,0,3.1],[-0.8,-0.6,47.8,0,103.3,0,61.3],[0,0,47.3,0,102.6,0,58.3],[-8.9,0.6,-10.2],[58.7],[-5,0,0],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[15,0,100],[-12.2,89.7,25.5],[0,0,-15.3],[0,0,17.1],[6,0,0.5],[28.3],[-6,-6,-14.8],[-6,0,5.5],[28.5],[6,6,-9.9],[44,-47.1,-5.4],[147.8],[-22.2,22.7,47],[-90.6,68.7,81.4,0,9.9,0,10],[0,0,10,0,54.2,0,10],[-4.9,-1.2,13.4,0,45,0,3.1],[-0.8,-0.6,47.8,0,103.3,0,61.3],[0,0,47.3,0,102.6,0,58.3],[-8.9,0.6,-14.9],[31.8],[-5,0,0],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[15,0,100],[-12.2,89.7,25.5],[1.4,-0.4,-15.3],[3.5,1.1,17],[8,0,0.5],[28.3],[-6,-6,-14.8],[-6,0,5.5],[28.5],[6,6,-9.9],[35.4,-49.5,20.1],[17.5],[-23.8,20.9,51.6],[-90.6,68.7,90.9,0,90,0,62.3],[0,0,23,0,84.9,0,65.8],[-5.3,-1.3,49,0,79,0,109.2],[-0.8,-0.6,47.8,0,103.3,0,61.3],[0,0,47.3,0,102.6,0,58.3],[-9.1,0.6,-14.9],[31.8],[-5,0,0],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-      ];
-      handCrossingViewer.posture = this.handCrossingViewerPostures[0];
-
-      var prayingViewer = new myMale(0.65, 'orange', 'white', '#F0C2AA');
-      var prayingViewerPostures = [
-        {"version":7,"data":[[100,0,-100],[-180,-48.4,161.4],[0,0,7.7],[0,0,15.6],[6,8.9,80.7],[150],[-5.5,31.1,66.8],[-6,0,82.4],[149.9],[6,6,68],[3.3,-0.3,-5],[50.3],[-6.3,27.2,0],[-90,70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[-2.2,1,4.8],[33.9],[-5.6,-37.9,0],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[100,0,-100],[-180,-48.4,162.7],[-2,0.5,-60],[0.2,1.1,-24.2],[6,8.9,79.9],[150],[-5.5,31.1,75.1],[-6,0,82.4],[149.9],[6,6,68],[3.3,-0.3,142.3],[1.6],[-9,27.1,1.2],[-90,70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[-2.2,1,149.9],[0.1],[-11.7,-37.8,-3.8],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[100,0,-100],[-180,-48.4,162.7],[-2,0.5,-60],[0.2,1.1,-24.2],[6,8.9,79.9],[150],[-5.5,31.1,75.1],[-6,0,82.4],[149.9],[6,6,68],[3.3,-0.3,142.3],[1.6],[-9,27.1,1.2],[-90,70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[-2.2,1,149.9],[0.1],[-11.7,-37.8,-3.8],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[100,0,-100],[-180,-48.4,162.7],[-2,0.5,16.8],[0.2,1.1,11.1],[6,8.9,79.9],[150],[-5.5,31.1,75.1],[-6,0,82.4],[149.9],[6,6,68],[3.3,-0.3,145.1],[20.8],[-31.5,24.9,11.2],[-90,70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[-2.2,1,134.5],[46.4],[-11.7,-37.8,-3.8],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-        {"version":7,"data":[[100,0,-100],[-180,-48.4,162.7],[-2,0.5,-60],[0.2,1.1,-24.2],[6,8.9,79.9],[150],[-5.5,31.1,75.1],[-6,0,82.4],[149.9],[6,6,68],[3.3,-0.3,142.3],[1.6],[-9,27.1,1.2],[-90,70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[-2.2,1,149.9],[0.1],[-11.7,-37.8,-3.8],[90,-70,75,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10],[0,0,10,0,10,0,10]]},
-      ];
-      prayingViewer.posture = this.prayingViewerPostures[0];
-
-      var postureIndex = 0;
-      var isInMovement = false;
-      var changeHolder = 0;
-
-      var ufo = new Ufo();
-      scene.add(ufo);
-      ufo.position.set(0, 75, 0);
-
-      var tree1 = new Tree(-150,0,50, 0.8);
-      var tree2 = new Tree(100,0,-150, 0.75);
-      var tree3 = new Tree(100,0,-50, 1);
-      var tree4 = new Tree(-50,0,150, 0.9);
-      var tree5 = new Tree(-75,-15,80, 0.6);
-      var tree6 = new Tree(-50,0,-150, 0.9);
-      scene.add(tree1,tree2,tree3,tree4,tree5,tree6);
-
-      var colorFlowers = ['red', 'blue', 'orange', 'yellow', 'cyan', 'magenta'];
-      for(var i = 0; i <= 60; i++){
-        var angle = Math.random() * (2 * Math.PI);
-        var distance = 100 + Math.random() * 150;
-
-        var flower = new Flower(distance * Math.cos(angle), distance * Math.sin(angle), colorFlowers[(Math.floor(Math.random() * colorFlowers.length))]);
-        scene.add(flower);
-        console.log(angle);
+      if (k >= 0.05 && k <= 0.95) {
+        this.isInMovement = true;
       }
 
-      function findBottom(mannequinToFind){
-          return Math.min(
-            mannequinToFind.l_ankle.point(6,2,0).y,
-            mannequinToFind.l_ankle.point(-2,2.5,0).y,
-            mannequinToFind.l_ankle.point(2,2.5,2).y,
-            mannequinToFind.l_ankle.point(2,2.5,-2).y,
+      if (this.changeHolder % 2 == 1) {
+        this.shockedViewer.posture = Mannequin.blend(
+          this.shockedViewerPostures[nextPostureIndex],
+          this.shockedViewerPostures[postureIndex],
+          k
+        );
 
-            mannequinToFind.r_ankle.point(6,2,0).y,
-            mannequinToFind.r_ankle.point(-2,2.5,0).y,
-            mannequinToFind.r_ankle.point(2,2.5,2).y,
-            mannequinToFind.r_ankle.point(2,2.5,-2).y
+        this.handCrossingViewer.posture = Mannequin.blend(
+          this.handCrossingViewerPostures[nextPostureIndex],
+          this.handCrossingViewerPostures[postureIndex],
+          k
+        );
+
+        this.prayingViewer.posture = Mannequin.blend(
+          this.prayingViewerPostures[nextPostureIndex],
+          this.prayingViewerPostures[postureIndex],
+          k
+        );
+      } else {
+        this.shockedViewer.posture = Mannequin.blend(
+          this.shockedViewerPostures[postureIndex],
+          this.shockedViewerPostures[nextPostureIndex],
+          k
+        );
+        this.handCrossingViewer.posture = Mannequin.blend(
+          this.handCrossingViewerPostures[postureIndex],
+          this.handCrossingViewerPostures[nextPostureIndex],
+          k
+        );
+        this.prayingViewer.posture = Mannequin.blend(
+          this.prayingViewerPostures[postureIndex],
+          this.prayingViewerPostures[nextPostureIndex],
+          k
         );
       }
 
-      function animate(t) {
-        ufo.animate(t);
+      bottomShockedViewer = findBottom(shockedViewer);
+      shockedViewer.position.y += (-29.5 - bottomShockedViewer);
 
-        {
-          manBeingSuckedIn.position.set(0, 5 + 5 * sin(0.4 * t), 0);
+      bottomhandCrossingViewer = findBottom(handCrossingViewer);
+      handCrossingViewer.position.y += (-29.5 - bottomhandCrossingViewer);
 
-          manBeingSuckedIn.bend = 30 * sin(t);
-          manBeingSuckedIn.tilt = 40 * cos(1.7 * t);
+      bottomPrayingViewer = findBottom(prayingViewer);
+      prayingViewer.position.y += (-29.5 - bottomPrayingViewer);
 
-          manBeingSuckedIn.head.turn = 40 * sin(1.9 * t);
-          manBeingSuckedIn.head.nod = 20 * sin(2.3 * t);
-          manBeingSuckedIn.head.tilt = 10 * sin(1.4 * t);
-
-          manBeingSuckedIn.l_leg.reset();
-          manBeingSuckedIn.r_leg.reset();
-          manBeingSuckedIn.l_leg.straddle = 30 * cos(2.2 * t) + 50;
-          manBeingSuckedIn.r_leg.straddle = 30 * sin(2.6 * t) + 50;
-          manBeingSuckedIn.l_leg.raise = 40 * sin(2.4 * t) + 30;
-          manBeingSuckedIn.r_leg.raise = 40 * cos(2.1 * t) + 30;
-          manBeingSuckedIn.l_leg.turn = 30 * cos(1.2 * t) + 20;
-          manBeingSuckedIn.r_leg.turn = 30 + sin(1.6 * t) + 20;
-
-          manBeingSuckedIn.l_knee.bend = 40 * sin(2.4 * t) + 40;
-          manBeingSuckedIn.r_knee.bend = 40 * sin(1.9 * t) + 40;
-
-          manBeingSuckedIn.l_arm.reset();
-          manBeingSuckedIn.r_arm.reset();
-          manBeingSuckedIn.l_arm.raise = 50 * sin(2.1 * t) + 40;
-          manBeingSuckedIn.r_arm.raise = 50 * cos(2.5 * t) + 40;
-          manBeingSuckedIn.l_arm.straddle = 20 * cos(2.3 * t) + 20;
-          manBeingSuckedIn.r_arm.straddle = 20 * sin(2.4 * t) + 20;
-          manBeingSuckedIn.l_arm.turn = 30 * cos(1.7 * t) + 40;
-          manBeingSuckedIn.r_arm.turn = 30 * sin(1.4 * t) + 40;
-
-          manBeingSuckedIn.l_elbow.bend = 40 * sin(1.9 * t) + 40;
-          manBeingSuckedIn.r_elbow.bend = 40 * sin(2.2 * t) + 40;
-
-          manBeingSuckedIn.l_fingers.bend = 40 * sin(4.9 * t) + 40;
-          manBeingSuckedIn.r_fingers.bend = 40 * cos(4.9 * t) + 40;
-        }
-
-        var nextPostureIndex = this.postureIndex + 1;
-        if (nextPostureIndex >= shockedViewerPostures.length) {
-          nextPostureIndex = 0;
-        }
-        // For stops at each end:
-        // var k = THREE.MathUtils.clamp(0.5 + sin(t), 0, 1);
-        // For continous animation: (experiencing glitches)
-        var k = Math.abs(sin(t + Math.PI * (changeHolder-1)));
-
-        if (k >= 0.05 && k <= 0.95) {
-          this.isInMovement = true;
-        }
-
-        if (this.changeHolder % 2 == 1) {
-          this.shockedViewer.posture = Mannequin.blend(
-            this.shockedViewerPostures[nextPostureIndex],
-            this.shockedViewerPostures[postureIndex],
-            k
-          );
-
-          this.handCrossingViewer.posture = Mannequin.blend(
-            this.handCrossingViewerPostures[nextPostureIndex],
-            this.handCrossingViewerPostures[postureIndex],
-            k
-          );
-
-          this.prayingViewer.posture = Mannequin.blend(
-            this.prayingViewerPostures[nextPostureIndex],
-            this.prayingViewerPostures[postureIndex],
-            k
-          );
-        } else {
-          this.shockedViewer.posture = Mannequin.blend(
-            this.shockedViewerPostures[postureIndex],
-            this.shockedViewerPostures[nextPostureIndex],
-            k
-          );
-          this.handCrossingViewer.posture = Mannequin.blend(
-            this.handCrossingViewerPostures[postureIndex],
-            this.handCrossingViewerPostures[nextPostureIndex],
-            k
-          );
-          this.prayingViewer.posture = Mannequin.blend(
-            this.prayingViewerPostures[postureIndex],
-            this.prayingViewerPostures[nextPostureIndex],
-            k
-          );
-        }
-
-        bottomShockedViewer = findBottom(shockedViewer);
-        shockedViewer.position.y += (-29.5 - bottomShockedViewer);
-
-        bottomhandCrossingViewer = findBottom(handCrossingViewer);
-        handCrossingViewer.position.y += (-29.5 - bottomhandCrossingViewer);
-
-        bottomPrayingViewer = findBottom(prayingViewer);
-        prayingViewer.position.y += (-29.5 - bottomPrayingViewer);
-
-        if ((k >= 0.95 || k <= 0.05) && this.isInMovement) {
-          this.postureIndex = nextPostureIndex;
-          this.isInMovement = false;
-          this.changeHolder++;
-        }
-
-        scene.rotation.y += 0.01;
+      if ((k >= 0.95 || k <= 0.05) && this.isInMovement) {
+        this.postureIndex = nextPostureIndex;
+        this.isInMovement = false;
+        this.changeHolder++;
       }
-    </script>
-  </body>
+
+      scene.rotation.y += 0.01;
+    }
+  </script>
+</body>
+
 </html>
