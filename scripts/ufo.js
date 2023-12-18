@@ -144,7 +144,7 @@ class Ufo extends THREE.Group {
   }
 
   animate = function (t) {
-    this.position.y += sin(t) / 5;
+    this.position.y += sin(t) / 10;
 
     var nextPostureIndex = this.alienPostureIndex + 1;
     if (nextPostureIndex >= this.alienPostures.length) {
